@@ -10,47 +10,23 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject var model: ContentModel
     var body: some View {
-        ScrollView {
-            LazyVStack {
-                ForEach(model.modules) { module in
-                    ZStack {
-                        Rectangle()
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                            .shadow(radius: 5)
-                            .aspectRatio(CGSize(width: 335, height: 175), contentMode: .fit)
-                        HStack {
-                            // Image
-                            Image("swift")
-                                .resizable()
-                                .frame(width: 115, height: 115)
-                                .clipShape(Circle())
-                            Spacer()
-                            // Text
-                            VStack(alignment: .leading, spacing: 10) {
-                                // Headline
-                                Text("lean Swift").bold()
-                                // Description
-                                Text("some description").padding(.bottom, 20)
-                                // Icons
-                                HStack {
-                                    // Number of lessons/questions
-                                    Image(systemName: "text.book.closed")
-                                        .resizable().frame(width:15, height:15)
-                                    Text("20 Lessons").font(.caption)
-                                    //Time
-                                    Image(systemName: "clock")
-                                        .resizable().frame(width:15, height: 15)
-                                    Text("2 Hours").font(.caption)
-                                }
-                            }
-                        }
-                        .padding(.horizontal, 20)
+        NavigationView {
+            VStack (alignment: .leading){
+                Text("What do you want to do today").padding(.leading, 20)
+                
+                ScrollView {
+                    LazyVStack {
+                        ForEach(model.modules) { module in
+                            // Learning card
+                            HomeViewRow(image: module.content.image, title: "learn \(module.category)", description: module.content.description, count: "\(module.content.lessons.count) Lessons", time: module.content.time)
+                            // Test card
+                            HomeViewRow(image: module.test.image, title: "learn \(module.category) test", description: module.test.description, count: "\(module.test.questions.count) Lessons", time: module.test.time)                }
                     }
-                }
-            }
-            .padding()
-        } }
+                    .padding()
+                } }
+            .navigationTitle("Get Started")
+        }
+    }
 }
 
 struct HomeView_Previews: PreviewProvider {
